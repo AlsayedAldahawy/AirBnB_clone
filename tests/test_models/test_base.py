@@ -22,8 +22,9 @@ class TestBase(unittest.TestCase):
 
     def test_save(self):
         obj1 = BaseModel()
+        updated1 = obj1.updated_at
         obj1.save()
-        self.assertNotEqual(obj1.created_at, obj1.updated_at)
+        self.assertNotEqual(updated1, obj1.updated_at)
     
     def test_to_dict(self):
         obj1 = BaseModel()
