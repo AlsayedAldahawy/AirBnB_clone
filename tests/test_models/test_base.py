@@ -25,7 +25,7 @@ class TestBase(unittest.TestCase):
         obj1.save()
         self.assertNotEqual(obj1.created_at, obj1.updated_at)
     
-    def to_dict(self):
+    def test_to_dict(self):
         obj1 = BaseModel()
 
         dict_1 = obj1.to_dict()
@@ -33,3 +33,5 @@ class TestBase(unittest.TestCase):
         dict_2["__class__"] = str(type(obj1).__name__)
         dict_2["created_at"] = obj1.created_at.isoformat()
         dict_2["updated_at"] = obj1.updated_at.isoformat()
+
+        self.assertEqual(dict_1, dict_2)
