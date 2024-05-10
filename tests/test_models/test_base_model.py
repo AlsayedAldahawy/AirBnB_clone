@@ -44,3 +44,14 @@ class TestBase(unittest.TestCase):
         self.assertIsNotNone(BaseModel.__str__.__doc__)
         self.assertIsNotNone(BaseModel.save.__doc__)
         self.assertIsNotNone(BaseModel.to_dict.__doc__)
+
+    def test_init_kwargs(self):
+        """checking kwargs in init method"""
+
+        obj1 = BaseModel()
+        dict_1 = obj1.to_dict()
+        obj2 = BaseModel(**dict_1)
+
+        self.assertEqual(obj1.id, obj2.id)
+        self.assertEqual(obj1.created_at, obj2.created_at)
+        self.assertEqual(obj1.updated_at, obj2.updated_at)
