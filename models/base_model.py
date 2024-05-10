@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 from uuid import uuid4
 from datetime import datetime
+from models import storage
 
 '''
     base_model.py module cintains the class BaseModel
@@ -54,6 +55,8 @@ class BaseModel:
                         setattr(self, key, datetime.fromisoformat(value))
                     else:
                         setattr(self, key, value)
+        else:
+            storage.new(self)
 
     def __str__(self):
         """
@@ -70,6 +73,7 @@ class BaseModel:
         Updates the updated_at attribute with the current datetime.
         """
         self.updated_at = datetime.now()
+        storage.save()
 
     def to_dict(self):
         """
