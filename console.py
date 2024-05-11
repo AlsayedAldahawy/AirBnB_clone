@@ -98,7 +98,8 @@ class HBNBCommand(cmd.Cmd):
                 if id not in list_of_ids:
                     print("** no instance found **")
                 else:
-                    print(storage._FileStorage__objects["BaseModel." + args[1]])
+                    print(storage._FileStorage__objects["BaseModel."
+                                                        + id])
 
     def do_destroy(self, arg):
         """
