@@ -46,6 +46,10 @@ class HBNBCommand(cmd.Cmd):
         print()
         exit()
 
+    def emptyline(self):
+        """ Overrides the emptyline method of CMD """
+        pass
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
