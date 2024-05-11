@@ -94,10 +94,11 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
         else:
             # print(";;;" , storage._FileStorage__objects )
-            if args[1] not in list_of_ids:
-                print("** no instance found **")
-            else:
-                print(storage._FileStorage__objects["BaseModel." + args[1]])
+            for id in args[1:]:
+                if id not in list_of_ids:
+                    print("** no instance found **")
+                else:
+                    print(storage._FileStorage__objects["BaseModel." + args[1]])
 
     def do_destroy(self, arg):
         """
@@ -118,7 +119,7 @@ class HBNBCommand(cmd.Cmd):
             id = key.split(".")[1]
             list_of_ids.append(id)
 
-        # print("LOIDs",list_of_ids)
+        # print("LOIDs:",list_of_ids)
         if not arg:
             print("** class name missing **")
         elif args[0] not in ["BaseModel"]:
