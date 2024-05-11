@@ -88,3 +88,4 @@ class BaseModel:
         attr_dict["created_at"] = self.created_at.isoformat()
         attr_dict["updated_at"] = self.updated_at.isoformat()
         return attr_dict
+    

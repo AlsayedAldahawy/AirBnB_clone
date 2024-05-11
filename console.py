@@ -7,6 +7,7 @@ console.py module contains the entry point of the command interpreter:
 import cmd
 from models.base_model import BaseModel
 from models import storage 
+import json
 
 
 class HBNBCommand(cmd.Cmd):
@@ -66,9 +67,17 @@ class HBNBCommand(cmd.Cmd):
         print("Creates a new instance of BaseModel,\nsaves it (to the JSON file) and prints the id.\nEx: $ create BaseModel")
 
     def do_show(self, arg):
-
+        
         args = arg.split()
+        storage.reload()
 
+        list_of_ids = []
+
+        for key in storage._FileStorage__objects:
+            id = key.split(".")[1]
+            list_of_ids.append(id)
+
+        # print("LOIDs",list_of_ids)
         if not arg:
             print("** class name missing **")
         elif args[0] not in ["BaseModel"]:
@@ -76,12 +85,52 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) < 2:
             print("** instance id missing **")
         else:
-            if args[1] not in storage._FileStorage__objects:
+            # print(";;;" , storage._FileStorage__objects )
+            if args[1] not in list_of_ids:
                 print("** no instance found **")
             else:
-                print(storage._FileStorage__objects[args[1]])
+                print(storage._FileStorage__objects["BaseModel." + args[1]])
 
+    def do_destroy(self, arg):
+        args = arg.split()
+        storage.reload()
+
+        list_of_ids = []
+
+        for key in storage._FileStorage__objects:
+            id = key.split(".")[1]
+            list_of_ids.append(id)
+
+        # print("LOIDs",list_of_ids)
+        if not arg:
+            print("** class name missing **")
+        elif args[0] not in ["BaseModel"]:
+            print("** class doesn't exist **")
+        elif len(args) < 2:
+            print("** instance id missing **")
+        else:
+            # print(";;;" , storage._FileStorage__objects )
+            if args[1] not in list_of_ids:
+                print("** no instance found **")
+            else:
+                del storage._FileStorage__objects["BaseModel." + args[1]]
         
+        storage.save()
+
+    def do_all(self, arg):
+        args = arg.split()
+
+        if not arg or args[0] in ("BaseModel"):
+            storage.reload()
+
+            list_of_dicts = []
+            for key, value in storage._FileStorage__objects.items():
+                list_of_dicts.append(str(value))
+            print(list_of_dicts)
+
+        else:
+            print("** class doesn't exist **")
+
         
 
 if __name__ == '__main__':
