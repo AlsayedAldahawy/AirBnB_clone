@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+"""
+console.py module contains the entry point of the command interpreter:
+"""
+
 import cmd
 
 
