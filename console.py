@@ -36,12 +36,6 @@ class HBNBCommand(cmd.Cmd):
         """
         exit()
 
-    def help_quit(self):
-        """
-        Prints the help documentation for the 'quit' command.
-        """
-        print("Quit command to exit the program\n")
-
     def do_EOF(self, arg):
         """
         Handles the end-of-file (EOF) condition to exit the program.
@@ -54,6 +48,15 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, line):
+        """
+        Creates a new instance of a specified class.
+
+        Args:
+            line (str): The input argument containing the class name.
+
+        Returns:
+            None
+        """
         if not line:
             print("** class name missing **")
         elif line == "BaseModel":
@@ -63,12 +66,16 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
-    def help_create(self):
-        print("Creates a new instance of BaseModel,\nsaves it\
-              (to the JSON file) and prints the id.\nEx: $ create BaseModel")
-
     def do_show(self, arg):
+        """
+        Displays information about a specific instance.
 
+        Args:
+        arg (str): The input argument containing class name and instance ID.
+
+        Returns:
+            None
+        """
         args = arg.split()
         storage.reload()
 
@@ -93,6 +100,15 @@ class HBNBCommand(cmd.Cmd):
                 print(storage._FileStorage__objects["BaseModel." + args[1]])
 
     def do_destroy(self, arg):
+        """
+        Deletes an instance from the storage.
+
+        Args:
+        arg (str): The input argument containing class name and instance ID.
+
+        Returns:
+            None
+        """
         args = arg.split()
         storage.reload()
 
@@ -123,6 +139,16 @@ class HBNBCommand(cmd.Cmd):
         storage.save()
 
     def do_all(self, arg):
+        """
+        Prints all instances or instances of a specific class.
+
+        Args:
+            arg (str): The input argument containing class name.
+
+        Returns:
+            None
+        """
+
         args = arg.split()
 
         if not arg or args[0] in ("BaseModel"):
@@ -138,7 +164,16 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def do_update(self, arg):
+        """
+        Updates an attribute of an instance.
 
+        Args:
+            arg (str): The input argument containing class name, instance ID,\
+                attribute name, and value.
+
+        Returns:
+            None
+        """
         args = arg.split()
         storage.reload()
 
@@ -168,6 +203,35 @@ class HBNBCommand(cmd.Cmd):
                 print("Unacceptable attribute name")
 
         storage.save()
+
+    # ----- ---- --- Help methos --- ---- -----
+
+    def help_quit(self):
+        """
+        Prints the help documentation for the 'quit' command.
+        """
+        print("Quit command to exit the program\n")
+
+    def help_create(self):
+        print("Creates a new instance of BaseModel,\nsaves it\
+            (to the JSON file) and prints the id.\nEx: $ create BaseModel")
+
+    def help_show(self):
+        print("show <class_name> <instance_id>: Display information\
+              about an instance")
+
+    def help_destroy(self):
+        print(
+            "destroy <class_name> <instance_1_id> ... <instance_N_id> : \
+                Delete an instance")
+
+    def help_all(self):
+        print("all <class_name>: Print all instances or instances of a\
+               specific class")
+
+    def help_update(self):
+        print("update <class_name> <instance_id> <attribute_name> <value>:\
+               Update or add an attribute")
 
 
 if __name__ == '__main__':
