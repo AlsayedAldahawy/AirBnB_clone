@@ -6,7 +6,7 @@ console.py module contains the entry point of the command interpreter:
 
 import cmd
 from models.base_model import BaseModel
-from models import storage 
+from models import storage
 import json
 
 
@@ -64,10 +64,11 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def help_create(self):
-        print("Creates a new instance of BaseModel,\nsaves it (to the JSON file) and prints the id.\nEx: $ create BaseModel")
+        print("Creates a new instance of BaseModel,\nsaves it\
+              (to the JSON file) and prints the id.\nEx: $ create BaseModel")
 
     def do_show(self, arg):
-        
+
         args = arg.split()
         storage.reload()
 
@@ -110,11 +111,15 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
         else:
             # print(";;;" , storage._FileStorage__objects )
-            if args[1] not in list_of_ids:
-                print("** no instance found **")
-            else:
-                del storage._FileStorage__objects["BaseModel." + args[1]]
-        
+            for id in args[1:]:
+                if id not in list_of_ids:
+                    print("** no instance found **")
+                else:
+                    try:
+                        del storage._FileStorage__objects["BaseModel." + id]
+                    except Exception:
+                        pass
+
         storage.save()
 
     def do_all(self, arg):
@@ -124,14 +129,46 @@ class HBNBCommand(cmd.Cmd):
             storage.reload()
 
             list_of_dicts = []
-            for key, value in storage._FileStorage__objects.items():
-                list_of_dicts.append(str(value))
+            list_of_dicts = [str(value)
+                             for value in
+                             storage._FileStorage__objects.values()]
             print(list_of_dicts)
 
         else:
             print("** class doesn't exist **")
 
-        
+    def do_update(self, arg):
+
+        args = arg.split()
+        storage.reload()
+
+        list_of_ids = []
+
+        for key in storage._FileStorage__objects:
+            id = key.split(".")[1]
+            list_of_ids.append(id)
+
+        if not arg:
+            print("** class name missing **")
+        elif args[0] not in ["BaseModel"]:
+            print("** class doesn't exist **")
+        elif len(args) < 2:
+            print("** instance id missing **")
+        elif args[1] not in list_of_ids:
+            print("** no instance found **")
+        elif len(args) < 3:
+            print("** attribute name missing **")
+        elif len(args) < 4:
+            print("** value missing **")
+        else:
+            obj = storage._FileStorage__objects["BaseModel." + args[1]]
+            try:
+                setattr(obj, args[2], args[3])
+            except Exception:
+                print("Unacceptable attribute name")
+
+        storage.save()
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
