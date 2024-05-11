@@ -24,7 +24,7 @@ class FileStorage:
                 obj_to_dict = {}
                 obj_to_dict[key] = obj.to_dict()
                 obj_to_dict_list.append(obj_to_dict)
-            jsonFile.write(json.dumps(obj_to_dict_list))    
+            jsonFile.write(json.dumps(obj_to_dict_list))
 
     def reload(self):
         from models.base_model import BaseModel
@@ -40,5 +40,5 @@ class FileStorage:
                             self.__class__.__objects[key] = BaseModel(**value)
                         elif model_name == "User":
                             self.__class__.__objects[key] = User(**value)
-        except:
+        except Exception:
             pass
