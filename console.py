@@ -6,6 +6,8 @@ console.py module contains the entry point of the command interpreter:
 
 import cmd
 from models.base_model import BaseModel
+from models.user import User
+
 from models import storage
 import json
 
@@ -47,20 +49,26 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, line):
+    def do_create(self, arg):
         """
         Creates a new instance of a specified class.
 
         Args:
-            line (str): The input argument containing the class name.
+            arg (str): The input argument containing the class name.
 
         Returns:
             None
         """
-        if not line:
+
+        args = arg.split()
+        if not arg:
             print("** class name missing **")
-        elif line == "BaseModel":
+        elif args[0] == "BaseModel":
             obj = BaseModel()
+            storage.save()
+            print(obj.id)
+        elif args[0] == "User":
+            obj = User()
             storage.save()
             print(obj.id)
         else:
@@ -88,7 +96,7 @@ class HBNBCommand(cmd.Cmd):
         # print("LOIDs",list_of_ids)
         if not arg:
             print("** class name missing **")
-        elif args[0] not in ["BaseModel"]:
+        elif args[0] not in ["BaseModel", "User"]:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
@@ -98,7 +106,7 @@ class HBNBCommand(cmd.Cmd):
                 if id not in list_of_ids:
                     print("** no instance found **")
                 else:
-                    print(storage._FileStorage__objects["BaseModel."
+                    print(storage._FileStorage__objects[args[0] + "."
                                                         + id])
 
     def do_destroy(self, arg):
@@ -111,34 +119,21 @@ class HBNBCommand(cmd.Cmd):
         Returns:
             None
         """
-        args = arg.split()
-        storage.reload()
+        args = arg.split()  # spliting the arguments line into a list of args
 
-        list_of_ids = []
+        if check_args(arg):
 
-        for key in storage._FileStorage__objects:
-            id = key.split(".")[1]
-            list_of_ids.append(id)
+            dict_lists_ids = dict_list_id()
 
-        # print("LOIDs:",list_of_ids)
-        if not arg:
-            print("** class name missing **")
-        elif args[0] not in ["BaseModel"]:
-            print("** class doesn't exist **")
-        elif len(args) < 2:
-            print("** instance id missing **")
-        else:
-            # print(";;;" , storage._FileStorage__objects )
             for id in args[1:]:
-                if id not in list_of_ids:
+                if id not in dict_lists_ids[args[0]]:
                     print("** no instance found **")
                 else:
                     try:
-                        del storage._FileStorage__objects["BaseModel." + id]
+                        del storage._FileStorage__objects[args[0] + "." + id]
                     except Exception:
                         pass
-
-        storage.save()
+                storage.save()
 
     def do_all(self, arg):
         """
@@ -153,7 +148,7 @@ class HBNBCommand(cmd.Cmd):
 
         args = arg.split()
 
-        if not arg or args[0] in ("BaseModel"):
+        if not arg or args[0] in ("BaseModel", "User"):
             storage.reload()
 
             list_of_dicts = []
@@ -187,7 +182,7 @@ class HBNBCommand(cmd.Cmd):
 
         if not arg:
             print("** class name missing **")
-        elif args[0] not in ["BaseModel"]:
+        elif args[0] not in ["BaseModel", "User"]:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
@@ -198,7 +193,7 @@ class HBNBCommand(cmd.Cmd):
         elif len(args) < 4:
             print("** value missing **")
         else:
-            obj = storage._FileStorage__objects["BaseModel." + args[1]]
+            obj = storage._FileStorage__objects[args[0] + "." + args[1]]
             try:
                 setattr(obj, args[2], args[3])
             except Exception:
@@ -234,6 +229,41 @@ class HBNBCommand(cmd.Cmd):
     def help_update(self):
         print("update <class_name> <instance_id> <attribute_name> <value>:\
                Update or add an attribute")
+
+
+def dict_list_id():
+    storage.reload()
+
+    list_of_ids_bm = []  # list of BaseModel class ids
+    list_of_ids_usr = []  # list of User class ids
+    dict_lists_ids = {}  # has two lists of ids for BaseModel, User
+
+    for key in storage._FileStorage__objects:
+        class_name = key.split(".")[0]
+        id = key.split(".")[1]
+        if class_name == "BaseModel":
+            list_of_ids_bm.append(id)
+        if class_name == "User":
+            list_of_ids_usr.append(id)
+
+    dict_lists_ids["BaseModel"] = list_of_ids_bm
+    dict_lists_ids["User"] = list_of_ids_usr
+
+    return dict_lists_ids
+
+
+def check_args(arg):
+    args = arg.split()
+    if not arg:
+        print("** class name missing **")
+        return 0
+    elif args[0] not in ["BaseModel", "User"]:
+        print("** class doesn't exist **")
+        return 0
+    elif len(args) < 2:
+        print("** instance id missing **")
+        return 0
+    return 1
 
 
 if __name__ == '__main__':

@@ -24,15 +24,21 @@ class FileStorage:
                 obj_to_dict = {}
                 obj_to_dict[key] = obj.to_dict()
                 obj_to_dict_list.append(obj_to_dict)
-            jsonFile.write(json.dumps(obj_to_dict_list))
+            jsonFile.write(json.dumps(obj_to_dict_list))    
 
     def reload(self):
         from models.base_model import BaseModel
+        from models.user import User
+
         try:
             with open(self.__class__.__file_path, "r") as jsonFile:
                 dicts_to_obj_list = json.loads(jsonFile.read())
                 for dicts in dicts_to_obj_list:
                     for key, value in dicts.items():
-                        self.__class__.__objects[key] = BaseModel(**value)
+                        model_name = key.split(".")[0]
+                        if model_name == "BaseModel":
+                            self.__class__.__objects[key] = BaseModel(**value)
+                        elif model_name == "User":
+                            self.__class__.__objects[key] = User(**value)
         except:
             pass
