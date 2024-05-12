@@ -7,7 +7,11 @@ console.py module contains the entry point of the command interpreter:
 import cmd
 from models.base_model import BaseModel
 from models.user import User
-
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 from models import storage
 import json
 
@@ -71,6 +75,27 @@ class HBNBCommand(cmd.Cmd):
             obj = User()
             storage.save()
             print(obj.id)
+        elif args[0] == "State":
+            obj = State()
+            storage.save()
+            print(obj.id)
+        elif args[0] == "City":
+            obj = City()
+            storage.save()
+            print(obj.id)
+        elif args[0] == "Amenity":
+            obj = Amenity()
+            storage.save()
+            print(obj.id)
+        elif args[0] == "Place":
+            obj = Place()
+            storage.save()
+            print(obj.id)
+        elif args[0] == "Review":
+            obj = Review()
+            storage.save()
+            print(obj.id)
+
         else:
             print("** class doesn't exist **")
 
@@ -85,25 +110,20 @@ class HBNBCommand(cmd.Cmd):
             None
         """
         args = arg.split()
-        storage.reload()
-
-        list_of_ids = []
-
-        for key in storage._FileStorage__objects:
-            id = key.split(".")[1]
-            list_of_ids.append(id)
+        dict_lists_ids = dict_list_id()
 
         # print("LOIDs",list_of_ids)
         if not arg:
             print("** class name missing **")
-        elif args[0] not in ["BaseModel", "User"]:
+        elif args[0] not in ["BaseModel", "User", "State", "City",
+                             "Amenity", "Place", "Review"]:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
         else:
             # print(";;;" , storage._FileStorage__objects )
             for id in args[1:]:
-                if id not in list_of_ids:
+                if id not in dict_lists_ids[args[0]]:
                     print("** no instance found **")
                 else:
                     print(storage._FileStorage__objects[args[0] + "."
@@ -148,7 +168,8 @@ class HBNBCommand(cmd.Cmd):
 
         args = arg.split()
 
-        if not arg or args[0] in ("BaseModel", "User"):
+        if not arg or args[0] in ["BaseModel", "User", "State", "City",
+                                  "Amenity", "Place", "Review"]:
             storage.reload()
 
             list_of_dicts = []
@@ -182,7 +203,8 @@ class HBNBCommand(cmd.Cmd):
 
         if not arg:
             print("** class name missing **")
-        elif args[0] not in ["BaseModel", "User"]:
+        elif args[0] not in ["BaseModel", "User", "State", "City",
+                             "Amenity", "Place", "Review"]:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
@@ -201,7 +223,7 @@ class HBNBCommand(cmd.Cmd):
 
         storage.save()
 
-    # ----- ---- --- Help methos --- ---- -----
+    # ----- ---- --- Help methods --- ---- -----
 
     def help_quit(self):
         """
@@ -236,6 +258,11 @@ def dict_list_id():
 
     list_of_ids_bm = []  # list of BaseModel class ids
     list_of_ids_usr = []  # list of User class ids
+    list_of_ids_sta = []
+    list_of_ids_cit = []
+    list_of_ids_amn = []
+    list_of_ids_plc = []
+    list_of_ids_rev = []
     dict_lists_ids = {}  # has two lists of ids for BaseModel, User
 
     for key in storage._FileStorage__objects:
@@ -245,9 +272,24 @@ def dict_list_id():
             list_of_ids_bm.append(id)
         if class_name == "User":
             list_of_ids_usr.append(id)
+        if class_name == "State":
+            list_of_ids_sta.append(id)
+        if class_name == "City":
+            list_of_ids_cit.append(id)
+        if class_name == "Amenity":
+            list_of_ids_amn.append(id)
+        if class_name == "Place":
+            list_of_ids_plc.append(id)
+        if class_name == "Review":
+            list_of_ids_rev.append(id)
 
     dict_lists_ids["BaseModel"] = list_of_ids_bm
     dict_lists_ids["User"] = list_of_ids_usr
+    dict_lists_ids["State"] = list_of_ids_sta
+    dict_lists_ids["City"] = list_of_ids_cit
+    dict_lists_ids["Amenity"] = list_of_ids_amn
+    dict_lists_ids["Place"] = list_of_ids_plc
+    dict_lists_ids["Review"] = list_of_ids_rev
 
     return dict_lists_ids
 
@@ -257,7 +299,8 @@ def check_args(arg):
     if not arg:
         print("** class name missing **")
         return 0
-    elif args[0] not in ["BaseModel", "User"]:
+    elif args[0] not in ["BaseModel", "User", "State", "City",
+                         "Amenity", "Place", "Review"]:
         print("** class doesn't exist **")
         return 0
     elif len(args) < 2:
