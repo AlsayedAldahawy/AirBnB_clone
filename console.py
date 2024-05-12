@@ -45,6 +45,24 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = "(hbnb)"
 
+    def default(self, line):
+        """
+        Handle unrecognized commands in the default format.
+
+        Args:
+            line (str): The input line containing the unrecognized command.
+
+        Returns:
+            None
+        """
+        args = line.split(".")
+
+        if len(args) == 2 and args[0] in HBNBCommand.classes\
+                and args[1] == "all()":
+            self.do_all(args[0])
+        else:
+            print("*** Unknown syntax:", line)
+
     def do_quit(self, command):
         """
         Handles the 'quit' command to exit the program.
@@ -205,23 +223,38 @@ class HBNBCommand(cmd.Cmd):
         print("Quit command to exit the program\n")
 
     def help_create(self):
+        """
+        Prints the help documentation for the 'create' command.
+        """
         print("Creates a new instance of BaseModel,\nsaves it\
             (to the JSON file) and prints the id.\nEx: $ create BaseModel")
 
     def help_show(self):
+        """
+        Prints the help documentation for the 'show' command.
+        """
         print("show <class_name> <instance_id>: Display information\
               about an instance")
 
     def help_destroy(self):
+        """
+        Prints the help documentation for the 'destroy' command.
+        """
         print(
             "destroy <class_name> <instance_1_id> ... <instance_N_id> : \
                 Delete an instance")
 
     def help_all(self):
+        """
+        Prints the help documentation for the 'all' command.
+        """
         print("all <class_name>: Print all instances or instances of a\
                specific class")
 
     def help_update(self):
+        """
+        Prints the help documentation for the 'update' command.
+        """
         print("update <class_name> <instance_id> <attribute_name> <value>:\
                Update or add an attribute")
 
@@ -235,7 +268,6 @@ def dict_list_id():
             object IDs of each class.
     """
     storage.reload()
-
     dict_lists_ids = {}  # should have lists of ids keyed with class names
 
     # make dict_lists_id a dict of lists
@@ -251,6 +283,15 @@ def dict_list_id():
 
 
 def check_args(arg):
+    """
+    Validates input arguments for class name and instance ID.
+
+    Args:
+        arg (str): The input argument containing class name and instance ID.
+
+    Returns:
+        int: 1 if arguments are valid, 0 otherwise.
+    """
     args = arg.split()
     if not arg:
         print("** class name missing **")
