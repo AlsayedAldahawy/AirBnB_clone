@@ -13,7 +13,6 @@ from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
 from models import storage
-import json
 
 
 class HBNBCommand(cmd.Cmd):
@@ -180,33 +179,22 @@ class HBNBCommand(cmd.Cmd):
         args = arg.split()
         storage.reload()
 
-        list_of_ids = []
+        dict_lists_ids = dict_list_id()
 
-        for key in storage._FileStorage__objects:
-            id = key.split(".")[1]
-            list_of_ids.append(id)
-
-        if not arg:
-            print("** class name missing **")
-
-        elif args[0] not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-        elif len(args) < 2:
-            print("** instance id missing **")
-        elif args[1] not in list_of_ids:
-            print("** no instance found **")
-        elif len(args) < 3:
-            print("** attribute name missing **")
-        elif len(args) < 4:
-            print("** value missing **")
-        else:
-            obj = storage._FileStorage__objects[args[0] + "." + args[1]]
-            try:
-                setattr(obj, args[2], args[3])
-            except Exception:
-                print("Unacceptable attribute name")
-
-        storage.save()
+        if check_args(arg):
+            if args[1] not in dict_lists_ids[args[0]]:
+                print("** no instance found **")
+            elif len(args) < 3:
+                print("** attribute name missing **")
+            elif len(args) < 4:
+                print("** value missing **")
+            else:
+                obj = storage._FileStorage__objects[args[0] + "." + args[1]]
+                try:
+                    setattr(obj, args[2], args[3])
+                    obj.save()
+                except Exception:
+                    print("** Unacceptable attribute name **")
 
     # ----- ---- --- Help methods --- ---- -----
 
@@ -239,42 +227,25 @@ class HBNBCommand(cmd.Cmd):
 
 
 def dict_list_id():
+    """
+    Creates a dictionary of lists containing object IDs keyed by class names.
+
+    Returns:
+        dict: A dictionary where keys are class names and values are lists of\
+            object IDs of each class.
+    """
     storage.reload()
 
-    list_of_ids_bm = []  # list of BaseModel class ids
-    list_of_ids_usr = []  # list of User class ids
-    list_of_ids_sta = []
-    list_of_ids_cit = []
-    list_of_ids_amn = []
-    list_of_ids_plc = []
-    list_of_ids_rev = []
-    dict_lists_ids = {}  # has two lists of ids for BaseModel, User
+    dict_lists_ids = {}  # should have lists of ids keyed with class names
+
+    # make dict_lists_id a dict of lists
+    for i in HBNBCommand.classes:
+        dict_lists_ids[i] = []
 
     for key in storage._FileStorage__objects:
         class_name = key.split(".")[0]
         id = key.split(".")[1]
-        if class_name == "BaseModel":
-            list_of_ids_bm.append(id)
-        if class_name == "User":
-            list_of_ids_usr.append(id)
-        if class_name == "State":
-            list_of_ids_sta.append(id)
-        if class_name == "City":
-            list_of_ids_cit.append(id)
-        if class_name == "Amenity":
-            list_of_ids_amn.append(id)
-        if class_name == "Place":
-            list_of_ids_plc.append(id)
-        if class_name == "Review":
-            list_of_ids_rev.append(id)
-
-    dict_lists_ids["BaseModel"] = list_of_ids_bm
-    dict_lists_ids["User"] = list_of_ids_usr
-    dict_lists_ids["State"] = list_of_ids_sta
-    dict_lists_ids["City"] = list_of_ids_cit
-    dict_lists_ids["Amenity"] = list_of_ids_amn
-    dict_lists_ids["Place"] = list_of_ids_plc
-    dict_lists_ids["Review"] = list_of_ids_rev
+        dict_lists_ids[class_name].append(id)
 
     return dict_lists_ids
 
