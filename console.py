@@ -55,11 +55,16 @@ class HBNBCommand(cmd.Cmd):
         Returns:
             None
         """
+
         args = line.split(".")
+        methods = ["all()", "count()"]
 
         if len(args) == 2 and args[0] in HBNBCommand.classes\
-                and args[1] == "all()":
-            self.do_all(args[0])
+                and args[1] in methods:
+            if args[1] == "all()":
+                self.do_all(args[0])
+            elif args[1] == "count()":
+                print(dict_list_id("c")[args[0]])
         else:
             print("*** Unknown syntax:", line)
 
@@ -259,7 +264,7 @@ class HBNBCommand(cmd.Cmd):
                Update or add an attribute")
 
 
-def dict_list_id():
+def dict_list_id(return_type="list"):
     """
     Creates a dictionary of lists containing object IDs keyed by class names.
 
@@ -269,16 +274,21 @@ def dict_list_id():
     """
     storage.reload()
     dict_lists_ids = {}  # should have lists of ids keyed with class names
+    dict_ids_count = {}
 
     # make dict_lists_id a dict of lists
     for i in HBNBCommand.classes:
         dict_lists_ids[i] = []
+        dict_ids_count[i] = 0
 
     for key in storage._FileStorage__objects:
         class_name = key.split(".")[0]
         id = key.split(".")[1]
         dict_lists_ids[class_name].append(id)
+        dict_ids_count[class_name] += 1
 
+    if return_type == "count" or return_type == "c":
+        return dict_ids_count
     return dict_lists_ids
 
 
