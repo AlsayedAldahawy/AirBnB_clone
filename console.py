@@ -57,14 +57,37 @@ class HBNBCommand(cmd.Cmd):
         """
 
         args = line.split(".")
-        methods = ["all()", "count()"]
+        commands = ["all()", "count()"]
+        id_commands = {"show": self.do_show,
+                       "update": self.do_update, "destroy": self.do_destroy}
 
         if len(args) == 2 and args[0] in HBNBCommand.classes\
-                and args[1] in methods:
+                and (args[1] in commands or args[1].split('(')[0]
+                     in id_commands):
+
+            class_name = args[0]
             if args[1] == "all()":
                 self.do_all(args[0])
             elif args[1] == "count()":
                 print(dict_list_id("c")[args[0]])
+            else:
+
+                try:
+                    command = args[1].split("(")[0]  # isolating command name
+                    rest_of_line = args[1].split("(")[1]
+
+                    if rest_of_line[0] not in ("'", "\"") or ")"\
+                            not in rest_of_line:
+                        print("*** Unknown syntax:", line)
+                    else:
+                        delimiter = rest_of_line[0]
+                        id = rest_of_line[1:].split(delimiter)[0]
+                        print(class_name, command, id)
+                        id_commands[command](class_name + " " + id)
+
+                except Exception:
+                    print("*** Unknown syntax:", line)
+
         else:
             print("*** Unknown syntax:", line)
 
