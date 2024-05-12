@@ -110,18 +110,11 @@ class HBNBCommand(cmd.Cmd):
             None
         """
         args = arg.split()
-        dict_lists_ids = dict_list_id()
 
-        # print("LOIDs",list_of_ids)
-        if not arg:
-            print("** class name missing **")
-        elif args[0] not in ["BaseModel", "User", "State", "City",
-                             "Amenity", "Place", "Review"]:
-            print("** class doesn't exist **")
-        elif len(args) < 2:
-            print("** instance id missing **")
-        else:
-            # print(";;;" , storage._FileStorage__objects )
+        if check_args(arg):
+
+            dict_lists_ids = dict_list_id()
+
             for id in args[1:]:
                 if id not in dict_lists_ids[args[0]]:
                     print("** no instance found **")
@@ -171,11 +164,17 @@ class HBNBCommand(cmd.Cmd):
         if not arg or args[0] in ["BaseModel", "User", "State", "City",
                                   "Amenity", "Place", "Review"]:
             storage.reload()
-
             list_of_dicts = []
-            list_of_dicts = [str(value)
-                             for value in
-                             storage._FileStorage__objects.values()]
+            if not arg:
+                list_of_dicts = [str(value)
+                                 for value in
+                                 storage._FileStorage__objects.values()]
+            else:
+                list_of_dicts = [str(value)
+                                 for key, value in
+                                 storage._FileStorage__objects.items()
+                                 if key.split(".")[0] == args[0]]
+
             print(list_of_dicts)
 
         else:
