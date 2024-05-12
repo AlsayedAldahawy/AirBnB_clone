@@ -3,10 +3,12 @@
 """
 City Module
 
-This module defines the City class, which inherits from BaseModel. It represents a city with attributes for state ID and name.
+This module defines the City class, which inherits from BaseModel.\
+    It represents a city with attributes for state ID and name.
 """
 
 from models.base_model import BaseModel
+
 
 class City(BaseModel):
     """

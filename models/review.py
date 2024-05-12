@@ -3,10 +3,12 @@
 """
 Review Module
 
-This module defines the Review class, which inherits from BaseModel. It represents a review with attributes for place ID, user ID, and text.
+This module defines the Review class, which inherits from BaseModel.\
+    It represents a review with attributes for place ID, user ID, and text.
 """
 
 from models.base_model import BaseModel
+
 
 class Review(BaseModel):
     """

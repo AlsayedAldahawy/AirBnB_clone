@@ -3,10 +3,13 @@
 """
 Place Module
 
-This module defines the Place class, which inherits from BaseModel. It represents a place with various attributes such as city ID, user ID, name, description, and amenities.
+This module defines the Place class, which inherits from BaseModel.\
+    It represents a place with various attributes such as city ID,\
+        user ID, name, description, and amenities.
 """
 
 from models.base_model import BaseModel
+
 
 class Place(BaseModel):
     """
