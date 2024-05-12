@@ -34,6 +34,8 @@ class HBNBCommand(cmd.Cmd):
             Prints the help documentation for the 'quit' command.
     """
 
+    classes = ["BaseModel", "User", "State",
+               "City", "Amenity", "Place", "Review"]
     prompt = "(hbnb)"
 
     def do_quit(self, command):
@@ -161,8 +163,7 @@ class HBNBCommand(cmd.Cmd):
 
         args = arg.split()
 
-        if not arg or args[0] in ["BaseModel", "User", "State", "City",
-                                  "Amenity", "Place", "Review"]:
+        if not arg or args[0] in HBNBCommand.classes:
             storage.reload()
             list_of_dicts = []
             if not arg:
@@ -202,8 +203,8 @@ class HBNBCommand(cmd.Cmd):
 
         if not arg:
             print("** class name missing **")
-        elif args[0] not in ["BaseModel", "User", "State", "City",
-                             "Amenity", "Place", "Review"]:
+
+        elif args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
@@ -298,8 +299,7 @@ def check_args(arg):
     if not arg:
         print("** class name missing **")
         return 0
-    elif args[0] not in ["BaseModel", "User", "State", "City",
-                         "Amenity", "Place", "Review"]:
+    elif args[0] not in HBNBCommand.classes:
         print("** class doesn't exist **")
         return 0
     elif len(args) < 2:

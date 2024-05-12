@@ -35,26 +35,27 @@ class FileStorage:
         from models.review import Review
         from models.user import User
 
+        cls_name_to_cls = {
+            "BaseModel": BaseModel,
+            "User": User,
+            "State": State,
+            "City": City,
+            "Amenity": Amenity,
+            "Place": Place,
+            "Review": Review,
+        }
+
         try:
             with open(self.__class__.__file_path, "r") as jsonFile:
+
                 dicts_to_obj_list = json.loads(jsonFile.read())
+
                 for dicts in dicts_to_obj_list:
                     for key, value in dicts.items():
                         class_name = key.split(".")[0]
-                        if class_name == "BaseModel":
-                            self.__class__.__objects[key] = BaseModel(**value)
-                        elif class_name == "User":
-                            self.__class__.__objects[key] = User(**value)
-                        elif class_name == "State":
-                            self.__class__.__objects[key] = State(**value)
-                        elif class_name == "City":
-                            self.__class__.__objects[key] = City(**value)
-                        elif class_name == "Amenity":
-                            self.__class__.__objects[key] = Amenity(**value)
-                        elif class_name == "Place":
-                            self.__class__.__objects[key] = Place(**value)
-                        elif class_name == "Review":
-                            self.__class__.__objects[key] = Review(**value)
+                        if class_name in cls_name_to_cls:
+                            self.__class__.__objects[key] = cls_name_to_cls[
+                                class_name](**value)
 
         except Exception:
             pass
