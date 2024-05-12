@@ -34,8 +34,16 @@ class HBNBCommand(cmd.Cmd):
             Prints the help documentation for the 'quit' command.
     """
 
-    classes = ["BaseModel", "User", "State",
-               "City", "Amenity", "Place", "Review"]
+    classes = {
+        "BaseModel": BaseModel,
+        "User": User,
+        "State": State,
+        "City": City,
+        "Amenity": Amenity,
+        "Place": Place,
+        "Review": Review,
+    }
+
     prompt = "(hbnb)"
 
     def do_quit(self, command):
@@ -69,37 +77,16 @@ class HBNBCommand(cmd.Cmd):
         args = arg.split()
         if not arg:
             print("** class name missing **")
-        elif args[0] == "BaseModel":
-            obj = BaseModel()
-            storage.save()
-            print(obj.id)
-        elif args[0] == "User":
-            obj = User()
-            storage.save()
-            print(obj.id)
-        elif args[0] == "State":
-            obj = State()
-            storage.save()
-            print(obj.id)
-        elif args[0] == "City":
-            obj = City()
-            storage.save()
-            print(obj.id)
-        elif args[0] == "Amenity":
-            obj = Amenity()
-            storage.save()
-            print(obj.id)
-        elif args[0] == "Place":
-            obj = Place()
-            storage.save()
-            print(obj.id)
-        elif args[0] == "Review":
-            obj = Review()
-            storage.save()
-            print(obj.id)
 
-        else:
-            print("** class doesn't exist **")
+        elif args[0]:
+            for i in args[0:]:
+                if i in HBNBCommand.classes:
+                    obj = HBNBCommand.classes[i]()
+                    storage.save()
+                    print(obj.id)
+                else:
+                    print("** class doesn't exist **")
+                    break
 
     def do_show(self, arg):
         """
@@ -114,7 +101,6 @@ class HBNBCommand(cmd.Cmd):
         args = arg.split()
 
         if check_args(arg):
-
             dict_lists_ids = dict_list_id()
 
             for id in args[1:]:
@@ -137,7 +123,6 @@ class HBNBCommand(cmd.Cmd):
         args = arg.split()  # spliting the arguments line into a list of args
 
         if check_args(arg):
-
             dict_lists_ids = dict_list_id()
 
             for id in args[1:]:
