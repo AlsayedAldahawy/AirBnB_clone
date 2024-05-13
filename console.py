@@ -5,6 +5,7 @@ console.py module contains the entry point of the command interpreter:
 """
 
 import cmd
+import json
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
@@ -74,7 +75,7 @@ class HBNBCommand(cmd.Cmd):
 
                 try:
                     command = args[1].split("(")[0]  # isolating command name
-                    rest_of_line = args[1].split("(")[1]
+                    rest_of_line = args[1].split("(")[1].strip()
                     if rest_of_line[0] not in ("'", "\"") or ")"\
                             not in rest_of_line:
                         raise (Exception)
@@ -86,27 +87,39 @@ class HBNBCommand(cmd.Cmd):
                         if command != "update":
                             id_commands[command](class_name + " " + id)
                         else:
-                            if "," not in rest_of_line:
-                                raise (Exception)
-                            rest_of_line = rest_of_line.split(
-                                id + delimiter)[1]
-                            attr = rest_of_line.split(",")[1]
-                            attr = attr.split(delimiter)[1].split(delimiter)[
-                                0]  # isolating the attribute name
+                            if "{" not in rest_of_line and "}"\
+                                    not in rest_of_line:
+                                if "," not in rest_of_line:
+                                    raise (Exception)
+                                rest_of_line = rest_of_line.split(
+                                    id + delimiter)[1]
+                                attr = rest_of_line.split(",")[1]
+                                attr = attr.split(delimiter)[1].\
+                                    split(delimiter)[0]  # isolating attr name
 
-                            rest_of_line = rest_of_line.split(
-                                attr + delimiter)[1]
-                            value = rest_of_line.split(",")[1]
-                            value = value.split(delimiter)[
-                                1].split(delimiter)[0]
-                            # isolating the value of attr
+                                rest_of_line = rest_of_line.split(
+                                    attr + delimiter)[1]
+                                value = rest_of_line.split(",")[1]
+                                value = value.split(delimiter)[
+                                    1].split(delimiter)[0]
+                                # isolating the value of attr
 
-                            line = class_name + " " + id +\
-                                " " + attr + " " + value
-                            self.do_update(line)
+                                line = class_name + " " + id +\
+                                    " " + attr + " " + value
+                                self.do_update(line)
+                            elif "{" in rest_of_line and "}" in rest_of_line:
+                                my_dict = rest_of_line.split(
+                                    "{")[1].split("}")[0]
+                                my_dict = json.loads("{" + my_dict + "}")
+
+                                for attr, value in my_dict.items():
+                                    line = class_name + " " + id +\
+                                        " " + attr + " " + value
+                                    self.do_update(line)
 
                 except Exception:
-                    print("*** Unknown syntax:", line)
+                    raise
+                    # print("*** Unknown syntax:", line)
 
         else:
             print("*** Unknown syntax:", line)
