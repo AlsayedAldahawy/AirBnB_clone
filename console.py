@@ -75,15 +75,35 @@ class HBNBCommand(cmd.Cmd):
                 try:
                     command = args[1].split("(")[0]  # isolating command name
                     rest_of_line = args[1].split("(")[1]
-
                     if rest_of_line[0] not in ("'", "\"") or ")"\
                             not in rest_of_line:
-                        print("*** Unknown syntax:", line)
+                        raise (Exception)
                     else:
                         delimiter = rest_of_line[0]
-                        id = rest_of_line[1:].split(delimiter)[0]
-                        print(class_name, command, id)
-                        id_commands[command](class_name + " " + id)
+                        id = rest_of_line[1:].split(
+                            delimiter)[0]  # isolating id
+
+                        if command != "update":
+                            id_commands[command](class_name + " " + id)
+                        else:
+                            if "," not in rest_of_line:
+                                raise (Exception)
+                            rest_of_line = rest_of_line.split(
+                                id + delimiter)[1]
+                            attr = rest_of_line.split(",")[1]
+                            attr = attr.split(delimiter)[1].split(delimiter)[
+                                0]  # isolating the attribute name
+
+                            rest_of_line = rest_of_line.split(
+                                attr + delimiter)[1]
+                            value = rest_of_line.split(",")[1]
+                            value = value.split(delimiter)[
+                                1].split(delimiter)[0]
+                            # isolating the value of attr
+
+                            line = class_name + " " + id +\
+                                " " + attr + " " + value
+                            self.do_update(line)
 
                 except Exception:
                     print("*** Unknown syntax:", line)
