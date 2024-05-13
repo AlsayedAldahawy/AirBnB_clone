@@ -270,6 +270,10 @@ class HBNBCommand(cmd.Cmd):
             elif len(args) < 4:
                 print("** value missing **")
             else:
+                try:
+                    args[3] = eval(args[3])
+                except Exception:
+                    pass
                 obj = storage._FileStorage__objects[args[0] + "." + args[1]]
                 try:
                     setattr(obj, args[2], args[3])
