@@ -279,7 +279,7 @@ class HBNBCommand(cmd.Cmd):
                     setattr(obj, args[2], args[3])
                     obj.save()
                 except Exception:
-                    print("** Unacceptable attribute name **")
+                    pass
 
     # ----- ---- --- Help methods --- ---- -----
 

@@ -115,8 +115,10 @@ class HBNBCommand(cmd.Cmd):
 
                                 for attr, value in my_dict.items():
                                     line = class_name + " " + id +\
-                                        " " + attr + " " + value
+                                        " " + attr + " " + str(value)
                                     self.do_update(line)
+                            else:
+                                raise Exception
 
                 except Exception:
                     print("*** Unknown syntax:", line)
@@ -268,12 +270,16 @@ class HBNBCommand(cmd.Cmd):
             elif len(args) < 4:
                 print("** value missing **")
             else:
+                try:
+                    args[3] = eval(args[3])
+                except Exception:
+                    pass
                 obj = storage._FileStorage__objects[args[0] + "." + args[1]]
                 try:
                     setattr(obj, args[2], args[3])
                     obj.save()
                 except Exception:
-                    print("** Unacceptable attribute name **")
+                    pass
 
     # ----- ---- --- Help methods --- ---- -----
 

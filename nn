@@ -73,7 +73,7 @@ def exec_command(my_console, the_command, last_lines = 1):
  Tests
 """
 model_class = "BaseModel"
-dict_update = { 'attribute_name_dict': "string_value_dict" }
+dict_update = { 'attribute_name_dict': "string_value_dict", 'attribute_name_dict_2': 333 }
 result = exec_command(my_console, "create {}".format(model_class))
 if result is None or result == "":
     print("FAIL: No ID retrieved")
@@ -92,10 +92,10 @@ def model_has_attribute(my_console, model_class, model_id, dict_update):
             if k not in result:
                 is_found = False
                 break
-            if dict_update[k] not in result:
+            if str(dict_update[k]) not in result:
                 is_found = False
                 break
-    print (is_found)
+        
     return is_found
 
 result = exec_command(my_console, "{}.update(\"{}\", {})".format(model_class, model_id, dict_update))
