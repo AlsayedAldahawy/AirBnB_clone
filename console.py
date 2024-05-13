@@ -115,8 +115,10 @@ class HBNBCommand(cmd.Cmd):
 
                                 for attr, value in my_dict.items():
                                     line = class_name + " " + id +\
-                                        " " + attr + " " + value
+                                        " " + attr + " " + str(value)
                                     self.do_update(line)
+                            else:
+                                raise Exception
 
                 except Exception:
                     print("*** Unknown syntax:", line)
