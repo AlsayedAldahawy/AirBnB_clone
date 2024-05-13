@@ -55,8 +55,8 @@ class BaseModel:
                         setattr(self, key, datetime.fromisoformat(value))
                     else:
                         setattr(self, key, value)
-        else:
-            storage.new(self)
+
+        storage.new(self)
 
     def __str__(self):
         """

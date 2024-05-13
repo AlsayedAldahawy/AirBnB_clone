@@ -5,7 +5,6 @@ console.py module contains the entry point of the command interpreter:
 """
 
 import cmd
-import json
 import ast
 from models.base_model import BaseModel
 from models.user import User
@@ -46,85 +45,6 @@ class HBNBCommand(cmd.Cmd):
     }
 
     prompt = "(hbnb)"
-
-    def default(self, line):
-        """
-        Handle unrecognized commands in the default format.
-
-        Args:
-            line (str): The input line containing the unrecognized command.
-
-        Returns:
-            None
-        """
-
-        args = line.split(".")
-        commands = ["all()", "count()"]
-        id_commands = {"show": self.do_show,
-                       "update": self.do_update, "destroy": self.do_destroy}
-
-        if len(args) == 2 and args[0] in HBNBCommand.classes\
-                and (args[1] in commands or args[1].split('(')[0]
-                     in id_commands):
-
-            class_name = args[0]
-            if args[1] == "all()":
-                self.do_all(args[0])
-            elif args[1] == "count()":
-                print(dict_list_id("c")[args[0]])
-            else:
-
-                try:
-                    command = args[1].split("(")[0]  # isolating command name
-                    rest_of_line = args[1].split("(")[1].strip()
-                    if rest_of_line[0] not in ("'", "\"") or ")"\
-                            not in rest_of_line:
-                        raise (Exception)
-                    else:
-                        delimiter = rest_of_line[0]
-                        id = rest_of_line[1:].split(
-                            delimiter)[0]  # isolating id
-
-                        if command != "update":
-                            id_commands[command](class_name + " " + id)
-                        else:
-                            if "{" not in rest_of_line and "}"\
-                                    not in rest_of_line:
-                                if "," not in rest_of_line:
-                                    raise (Exception)
-                                rest_of_line = rest_of_line.split(
-                                    id + delimiter)[1]
-                                attr = rest_of_line.split(",")[1]
-                                attr = attr.split(delimiter)[1].\
-                                    split(delimiter)[0]  # isolating attr name
-
-                                rest_of_line = rest_of_line.split(
-                                    attr + delimiter)[1]
-                                value = rest_of_line.split(",")[1]
-                                value = value.split(delimiter)[
-                                    1].split(delimiter)[0]
-                                # isolating the value of attr
-
-                                line = class_name + " " + id +\
-                                    " " + attr + " " + value
-                                self.do_update(line)
-                            elif "{" in rest_of_line and "}" in rest_of_line:
-                                my_dict = rest_of_line.split(
-                                    "{")[1].split("}")[0]
-                                my_dict = ast.literal_eval("{" + my_dict + "}")
-
-                                for attr, value in my_dict.items():
-                                    line = class_name + " " + id +\
-                                        " " + attr + " " + str(value)
-                                    self.do_update(line)
-                            else:
-                                raise Exception
-
-                except Exception:
-                    print("*** Unknown syntax:", line)
-
-        else:
-            print("*** Unknown syntax:", line)
 
     def do_quit(self, command):
         """
@@ -280,6 +200,85 @@ class HBNBCommand(cmd.Cmd):
                     obj.save()
                 except Exception:
                     pass
+    
+    def default(self, line):
+        """
+        Handle unrecognized commands in the default format.
+
+        Args:
+            line (str): The input line containing the unrecognized command.
+
+        Returns:
+            None
+        """
+
+        args = line.split(".")
+        commands = ["all()", "count()"]
+        id_commands = {"show": self.do_show,
+                       "update": self.do_update, "destroy": self.do_destroy}
+
+        if len(args) == 2 and args[0] in HBNBCommand.classes\
+                and (args[1] in commands or args[1].split('(')[0]
+                     in id_commands):
+
+            class_name = args[0]
+            if args[1] == "all()":
+                self.do_all(args[0])
+            elif args[1] == "count()":
+                print(dict_list_id("c")[args[0]])
+            else:
+
+                try:
+                    command = args[1].split("(")[0]  # isolating command name
+                    rest_of_line = args[1].split("(")[1].strip()
+                    if rest_of_line[0] not in ("'", "\"") or ")"\
+                            not in rest_of_line:
+                        raise (Exception)
+                    else:
+                        delimiter = rest_of_line[0]
+                        id = rest_of_line[1:].split(
+                            delimiter)[0]  # isolating id
+
+                        if command != "update":
+                            id_commands[command](class_name + " " + id)
+                        else:
+                            if "{" not in rest_of_line and "}"\
+                                    not in rest_of_line:
+                                if "," not in rest_of_line:
+                                    raise (Exception)
+                                rest_of_line = rest_of_line.split(
+                                    id + delimiter)[1]
+                                attr = rest_of_line.split(",")[1]
+                                attr = attr.split(delimiter)[1].\
+                                    split(delimiter)[0]  # isolating attr name
+
+                                rest_of_line = rest_of_line.split(
+                                    attr + delimiter)[1]
+                                value = rest_of_line.split(",")[1]
+                                value = value.split(delimiter)[
+                                    1].split(delimiter)[0]
+                                # isolating the value of attr
+
+                                line = class_name + " " + id +\
+                                    " " + attr + " " + value
+                                self.do_update(line)
+                            elif "{" in rest_of_line and "}" in rest_of_line:
+                                my_dict = rest_of_line.split(
+                                    "{")[1].split("}")[0]
+                                my_dict = ast.literal_eval("{" + my_dict + "}")
+
+                                for attr, value in my_dict.items():
+                                    line = class_name + " " + id +\
+                                        " " + attr + " " + str(value)
+                                    self.do_update(line)
+                            else:
+                                raise Exception
+
+                except Exception:
+                    print("*** Unknown syntax:", line)
+
+        else:
+            print("*** Unknown syntax:", line)
 
     # ----- ---- --- Help methods --- ---- -----
 
