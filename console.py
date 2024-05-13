@@ -118,8 +118,7 @@ class HBNBCommand(cmd.Cmd):
                                     self.do_update(line)
 
                 except Exception:
-                    raise
-                    # print("*** Unknown syntax:", line)
+                    print("*** Unknown syntax:", line)
 
         else:
             print("*** Unknown syntax:", line)
