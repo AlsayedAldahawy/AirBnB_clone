@@ -6,6 +6,7 @@ console.py module contains the entry point of the command interpreter:
 
 import cmd
 import json
+import ast
 from models.base_model import BaseModel
 from models.user import User
 from models.state import State
@@ -110,7 +111,7 @@ class HBNBCommand(cmd.Cmd):
                             elif "{" in rest_of_line and "}" in rest_of_line:
                                 my_dict = rest_of_line.split(
                                     "{")[1].split("}")[0]
-                                my_dict = json.loads("{" + my_dict + "}")
+                                my_dict = ast.literal_eval("{" + my_dict + "}")
 
                                 for attr, value in my_dict.items():
                                     line = class_name + " " + id +\
