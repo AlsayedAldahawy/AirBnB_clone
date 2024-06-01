@@ -2,12 +2,21 @@ header{
     background-color: white;
     height: 70px;
     width: 100%;
-    border-bottom: 1px #cccccc;
+    padding: 0;
+    margin: 0;
+    border-bottom: 1px solid #CCCCCC;
     position: relative;
 }
 
-header>img{
-    position: absolute;
-    top: 50%;
-    left: 20px;
+#headerLogo {
+    height: 100%; /* give the div the same height as the header */
+    width: 142px; /* width of the logo */
+    /* we can't use img tag as required in the task, so we instead use the background
+    which is more common in the logos and banners of websites*/
+    background-image: url("../images/logo.png"); 
+    background-repeat: no-repeat; /* no repeating the background image */
+    background-position: center;
+
+    margin-left: 20px;
 }
+
