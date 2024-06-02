@@ -35,7 +35,7 @@
 
 	border-right: 1px solid #DDDDDD;
     display: inline-block;
-    padding-left: 45px;
+    margin-left: 45px;
     line-height: 100%;
 
 
@@ -46,7 +46,7 @@
 
 	height: 100%;
     width: 25%;
-    padding-left: 34.5%;
+    margin-left: 340px; /* 45 + 25% * 1000 + 45 */
     line-height: 100%;
 }
 
