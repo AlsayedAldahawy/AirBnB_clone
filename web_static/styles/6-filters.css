@@ -68,7 +68,12 @@ h4{
 ul{
     list-style-type: none;
 	padding: 0px;
-	padding-bottom: 20px;
+    padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+li{
+    padding-top: 2px;
 }
 .popover{
     visibility: hidden;
@@ -89,20 +94,16 @@ ul{
 }
 
 .popover h3{
-    transform: translateY(10%);
+    padding: 0;
     padding-left: 40px;
-    line-height: normal;
+
 }
 
 .popover h4{
-    transform: translateY(10%);
     padding-left: 50px;
-    line-height: normal;
+    padding-bottom: 10px;
 }
 
-.amenities .popover li{
-    padding-top: 10px;
-}
 
 .locations:hover .popover {
     visibility: visible;
