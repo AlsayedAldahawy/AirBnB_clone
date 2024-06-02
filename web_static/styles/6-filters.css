@@ -81,6 +81,7 @@ li{
     /* opacity: 0; */
 
     background-color: #FAFAFA;
+    z-index: 9999;
     width: 295px;
     border: #DDDDDD 1px solid;
     border-radius: 4px;
