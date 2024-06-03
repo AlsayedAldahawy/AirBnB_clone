@@ -44,7 +44,7 @@ The `images/` directory houses the project's logo and icons. The PNG files (`ico
 
 ## Screenshots
 
-![Screenshot](AirBnB_clone/web_static/readme_images/1.png)
+![Screenshot](readme_images/1.png)
 
 ![Screenshot](AirBnB_clone/web_static/readme_images/2.png)
 
