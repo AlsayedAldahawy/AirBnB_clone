@@ -49,4 +49,4 @@ The `images/` directory houses the project's logo and icons. The PNG files (`ico
 
 ## Screenshots
 
-![Screenshot](webstatic/readme_images/1.png)
+![Screenshot](/readme_images/1.png)
