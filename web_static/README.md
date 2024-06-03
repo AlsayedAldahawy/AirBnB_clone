@@ -42,13 +42,13 @@ The `images/` directory houses the project's logo and icons. The PNG files (`ico
 2. Open the desired HTML file in your web browser to view the corresponding page.
 3. Customize and extend the styles and content as needed for your specific project.
 
-## Authors
-
-- [Alsayed Aldahawy](https://www.github.com/alsayedaldahawy)
-
-
 ## Screenshots
 
 ![Screenshot](AirBnB_clone/web_static/readme_images/1.png)
 
 ![Screenshot](AirBnB_clone/web_static/readme_images/2.png)
+
+## Authors
+
+- [Alsayed Aldahawy](https://www.github.com/alsayedaldahawy)
+
